@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RISV-VBase InstructionsArithmetic Instructions1234567add rd, rs1, rs2 #Integer Addtionsub rd, rs1, rs2 #Integer Subtractionaddi rd, rs, immmul dst, src1, src2 #multiplication and use lower 32 bitsmulh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cyrushaw&#39;s Blog">
+<meta property="og:url" content="http://example.com/2024/03/15/RISCV/index.html">
+<meta property="og:site_name" content="Cyrushaw&#39;s Blog">
+<meta property="og:description" content="RISV-VBase InstructionsArithmetic Instructions1234567add rd, rs1, rs2 #Integer Addtionsub rd, rs1, rs2 #Integer Subtractionaddi rd, rs, immmul dst, src1, src2 #multiplication and use lower 32 bitsmulh">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-15T03:07:26.050Z">
+<meta property="article:modified_time" content="2024-03-13T02:14:40.033Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Cyrushaw&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Cyrushaw</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/bg/background.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-15 11:07" pubdate>
+          2024年3月15日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          181 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="RISV-V"><a href="#RISV-V" class="headerlink" title="RISV-V"></a>RISV-V</h2><h3 id="Base-Instructions"><a href="#Base-Instructions" class="headerlink" title="Base Instructions"></a>Base Instructions</h3><h4 id="Arithmetic-Instructions"><a href="#Arithmetic-Instructions" class="headerlink" title="Arithmetic Instructions"></a>Arithmetic Instructions</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">add </span>rd, rs1, rs2 <span class="hljs-comment">#Integer Addtion</span><br><span class="hljs-keyword">sub </span>rd, rs1, rs2 <span class="hljs-comment">#Integer Subtraction</span><br><span class="hljs-keyword">addi </span>rd, rs, imm<br><span class="hljs-keyword">mul </span>dst, src1, src2 <span class="hljs-comment">#multiplication and use lower 32 bits</span><br><span class="hljs-keyword">mulh </span>dst, src1, src2 <span class="hljs-comment">#multiplication and use upper 32 bits</span><br><span class="hljs-keyword">div </span>dst, src1, src2 <span class="hljs-comment">#quotient</span><br>rem dst, src1, src2 <span class="hljs-comment">#remainder</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="Bitwise-Instructions"><a href="#Bitwise-Instructions" class="headerlink" title="Bitwise Instructions"></a>Bitwise Instructions</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">and </span><span class="hljs-built_in">s1</span>,<span class="hljs-built_in">s2</span>, <span class="hljs-built_in">s3</span> <span class="hljs-comment">#and</span><br><span class="hljs-keyword">and </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, imm <span class="hljs-comment">#and immediate</span><br><span class="hljs-keyword">or </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, <span class="hljs-built_in">s3</span><br><span class="hljs-keyword">or </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, imm<br><span class="hljs-keyword">xor </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, <span class="hljs-built_in">s3</span><br><span class="hljs-keyword">xori </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, imm<br></code></pre></td></tr></table></figure>
+
+<h4 id="Data-Transfer-Instructions"><a href="#Data-Transfer-Instructions" class="headerlink" title="Data Transfer Instructions"></a>Data Transfer Instructions</h4><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs lua">memop reg, off(bAddr)<br>#memop:<br>#lw-<span class="hljs-built_in">load</span> word, sw-store word<br>#lb-<span class="hljs-built_in">load</span> <span class="hljs-built_in">byte</span>, sb-store <span class="hljs-built_in">byte</span>, they utilize the least significant <span class="hljs-built_in">byte</span> of the register<br>#lh-<span class="hljs-built_in">load</span> half-word, sh-store half-word, they utilize the <span class="hljs-built_in">lower</span> <span class="hljs-number">16</span> bites of the register<br>#<span class="hljs-keyword">for</span> sb <span class="hljs-keyword">and</span> sh, <span class="hljs-built_in">upper</span> bits are ignored, but <span class="hljs-keyword">for</span> lb <span class="hljs-keyword">and</span> lh, <span class="hljs-built_in">upper</span> bits are filled by sign-extension<br>#lhu-<span class="hljs-built_in">load</span> half-word unsigned, lbu-<span class="hljs-built_in">load</span> <span class="hljs-built_in">byte</span> unsigned, <span class="hljs-built_in">upper</span> bits are filled by zero-extension<br></code></pre></td></tr></table></figure>
+
+<h4 id="Control-Flow-Instructions"><a href="#Control-Flow-Instructions" class="headerlink" title="Control Flow Instructions"></a>Control Flow Instructions</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">beq </span>reg1, reg2, label <span class="hljs-comment">#branch if equal</span><br><span class="hljs-keyword">bne </span>reg1, reg2, label <span class="hljs-comment">#branch if not equal</span><br><span class="hljs-keyword">jal </span>reg, label <span class="hljs-comment">#jump and link, jal and j are PC indexed</span><br><span class="hljs-comment"># jal label #the default rd is ra</span><br><span class="hljs-keyword">jalr </span>reg1, reg2, off <span class="hljs-comment">#jump register and link</span><br><span class="hljs-comment"># jalr reg2 #the default rd is ra, and the default offset is zero</span><br><span class="hljs-comment"># think about how to use absolute address and absolute offset</span><br><span class="hljs-keyword">blt </span>reg1, reg2, label <span class="hljs-comment">#branch less than</span><br><span class="hljs-keyword">bge </span>reg1, reg2, label <span class="hljs-comment">#branch greater than or equal</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="Shifting-Instructions"><a href="#Shifting-Instructions" class="headerlink" title="Shifting Instructions"></a>Shifting Instructions</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">sll </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, <span class="hljs-built_in">s3</span> <span class="hljs-comment">#shift left logical</span><br><span class="hljs-keyword">slli </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, imm<br><span class="hljs-keyword">srl </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, <span class="hljs-built_in">s3</span> <span class="hljs-comment">#shift right logical</span><br><span class="hljs-keyword">srli </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, imm<br><span class="hljs-keyword">sra </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, <span class="hljs-built_in">s3</span> <span class="hljs-comment">#shift right arithmetic</span><br><span class="hljs-keyword">srai </span><span class="hljs-built_in">s1</span>, <span class="hljs-built_in">s2</span>, imm<br></code></pre></td></tr></table></figure>
+
+<h4 id="Compare-Instructions"><a href="#Compare-Instructions" class="headerlink" title="Compare Instructions"></a>Compare Instructions</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">slt </span>dst, reg1, reg2 <span class="hljs-comment">#set less than</span><br><span class="hljs-keyword">slti </span>dst, reg1, imm <span class="hljs-comment">#set less than immediate</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">the immeditate of the above immediate <span class="hljs-keyword">instructions </span>must <span class="hljs-keyword">be </span><span class="hljs-number">12</span> <span class="hljs-keyword">bits</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">because </span>we don<span class="hljs-string">&#x27;t have enough bits to represent 32 bits actually</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="Pseudo-Instructions"><a href="#Pseudo-Instructions" class="headerlink" title="Pseudo Instructions"></a>Pseudo Instructions</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">j</span> <span class="hljs-selector-tag">label</span> <span class="hljs-selector-id">#unconditional</span> <span class="hljs-selector-tag">jump</span>, <span class="hljs-selector-tag">j</span> <span class="hljs-selector-tag">and</span> <span class="hljs-selector-tag">jal</span> <span class="hljs-selector-tag">are</span> <span class="hljs-selector-tag">PC</span> <span class="hljs-selector-tag">indexed</span><br><span class="hljs-selector-tag">jr</span> <span class="hljs-selector-id">#jump</span> <span class="hljs-selector-tag">register</span><br><span class="hljs-selector-tag">li</span> <span class="hljs-selector-tag">dst</span>, <span class="hljs-selector-tag">imm</span> <span class="hljs-selector-id">#load</span> <span class="hljs-number">32</span><span class="hljs-selector-tag">-bit</span> <span class="hljs-selector-tag">immediate</span>, <span class="hljs-number">32</span> <span class="hljs-selector-tag">bits</span> <span class="hljs-selector-tag">are</span> <span class="hljs-selector-tag">important</span><br><span class="hljs-selector-tag">la</span> <span class="hljs-selector-tag">dst</span>, <span class="hljs-selector-tag">label</span> <span class="hljs-selector-id">#load</span> <span class="hljs-selector-tag">address</span>, <span class="hljs-selector-tag">which</span> <span class="hljs-selector-tag">can</span> <span class="hljs-selector-tag">be</span> <span class="hljs-selector-tag">used</span> <span class="hljs-selector-tag">to</span> <span class="hljs-selector-tag">tranform</span> <span class="hljs-selector-tag">label</span> <span class="hljs-selector-tag">to</span> <span class="hljs-selector-tag">value</span> <span class="hljs-selector-tag">of</span> <span class="hljs-selector-tag">register</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="Registers"><a href="#Registers" class="headerlink" title="Registers"></a>Registers</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-symbol">zero:</span> its value remains <span class="hljs-built_in">zero</span><br><span class="hljs-symbol">ra:</span> returned <span class="hljs-keyword">address</span><br><span class="hljs-keyword"></span><span class="hljs-symbol">sp:</span> stack pointer<br><span class="hljs-built_in">a0</span>-<span class="hljs-built_in">a7</span>: <span class="hljs-keyword">eight </span>arguments registers to pass parameters<br><span class="hljs-built_in">a0</span>-<span class="hljs-built_in">a1</span>: two argument registers also used to return values<br><span class="hljs-built_in">s0</span>-s11: saved registers<br><span class="hljs-built_in">t0</span>-<span class="hljs-built_in">t6</span>: temporary registers<br><br>for ecall<br><span class="hljs-symbol">a0:</span> its value detemines the effect of ecall<br><span class="hljs-symbol">a1:</span> ecall will print integer in <span class="hljs-built_in">a1</span> when <span class="hljs-built_in">a0</span> == <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<h3 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h3><p>our functions should abide by convention</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">Prologue<br><span class="hljs-symbol">    func_label:</span>                                 <span class="hljs-comment">#frame</span><br>    <span class="hljs-keyword">addi </span><span class="hljs-built_in">sp</span>, <span class="hljs-built_in">sp</span>, -framesize                     <span class="hljs-comment">#frame</span><br>    <span class="hljs-keyword">sw </span><span class="hljs-built_in">ra</span>, &lt;framesize<span class="hljs-number">-4</span>&gt;(<span class="hljs-built_in">sp</span>)                    <span class="hljs-comment">#frame</span><br>    <span class="hljs-comment">#store other callee saved registers         #callee</span><br>    <span class="hljs-comment">#...                                        #body</span><br>    <span class="hljs-comment">#save other regs if need be                 #caller</span><br><span class="hljs-keyword">Body </span>                                       <br>    <span class="hljs-comment">#...other functions                         #body</span><br>Epilogue            <br>    <span class="hljs-comment">#restore other regs if need be              #caller</span><br>    <span class="hljs-comment">#restore other callee saved registers       #callee</span><br>    <span class="hljs-keyword">lw </span><span class="hljs-built_in">ra</span>, &lt;framesize<span class="hljs-number">-4</span>&gt;(<span class="hljs-built_in">sp</span>)                    <span class="hljs-comment">#frame</span><br>    <span class="hljs-keyword">addi </span><span class="hljs-built_in">sp</span>, <span class="hljs-built_in">sp</span>, framesize                      <span class="hljs-comment">#frame</span><br>    <span class="hljs-keyword">jr </span><span class="hljs-built_in">ra</span>                                       <span class="hljs-comment">#frame</span><br><br>Whenever we want to call a function, write the frame <span class="hljs-keyword">and </span><span class="hljs-keyword">body </span>first, then<br><span class="hljs-keyword">add </span>prologue <span class="hljs-keyword">and </span>epilogue on perspective of callee <span class="hljs-keyword">and </span>caller respectively<br>Whenever we want to use register s, we must save them first<br><span class="hljs-keyword">because </span>it is callee<span class="hljs-string">&#x27;s duty. </span><br><span class="hljs-string">Whenever we want to use register t or arguments in register a as caller, </span><br><span class="hljs-string">just use them, but remember to save them before we call another function</span><br><span class="hljs-string">because it is caller&#x27;</span>s duty.<br>When do we have to push <span class="hljs-built_in">ra</span> into stack?<br>We are not in main function <span class="hljs-keyword">and </span>we are going to call another function.<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2024/03/15/RISCV/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年3月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/15/CS61C_20240304/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/15/notes_of_git/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/Cyrushaw" target="_blank" rel="nofollow noopener"><span>Cyrushaw</span></a> <i class="iconfont icon-copyright"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>2024BasedOnFluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
